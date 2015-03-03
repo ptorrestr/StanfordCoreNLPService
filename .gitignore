@@ -31,3 +31,6 @@ src/main/java/CoreNLP/
 #Build and gradle
 build/
 .gradle/
+
+#Python env
+env/

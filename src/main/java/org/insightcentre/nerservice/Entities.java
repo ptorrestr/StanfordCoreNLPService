@@ -39,7 +39,7 @@ public class Entities {
 					currentNer = "";
 				}
 			}
-			if ( !currentNer.equals("O") )
+			if ( !currentNer.equals("") )
 				namedEntities.add(currentNer);
 		}
 		return namedEntities;

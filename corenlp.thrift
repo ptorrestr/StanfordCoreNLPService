@@ -13,5 +13,5 @@ struct NamedEntity
 service StanfordCoreNLPService
 {
 	string ping(),
-	set<NamedEntity> get_entities(1:string text)
+	set<string> get_entities(1:string text)
 }

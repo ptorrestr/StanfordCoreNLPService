@@ -22,10 +22,11 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLPService.Iface {
 		entities = new Entities(stanfordCoreNLP);
 	}
 
-	public Set<NamedEntity> get_entities(String text) {
+	public Set<String> get_entities(String text) {
 		logger.info("Get entities for :" + text);
-		entities.getNamedEntities(text);
-		return null;
+		Set<String> names = entities.getNamedEntities(text);
+		logger.info(names);
+		return names;
 	}
 
 	public String ping() {
