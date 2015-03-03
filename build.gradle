@@ -1,0 +1,80 @@
+/****** PLUGINS *********/
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'application'
+
+/**** CONFIGURATION *****/
+group = 'org.insightcentre.nerservice'
+description = """ Stanford Core NLP Wrapper """
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+def thrift = [
+  config: 'corenlp.thrift',
+  pythonOut: 'build/python',
+  javaOut: 'src/main/java'
+]
+
+version = 1.0
+sourceSets {
+  main {
+    java { srcDir 'src/main/java' }
+  }
+}
+
+/***** DEPENDENCIES *****/
+dependencies {
+  compile group: 'log4j', name: 'log4j', version:'1.2.17'
+  compile group: 'org.apache.thrift', name: 'libthrift', version:'0.9.2'
+  compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version:'3.5.1'
+  compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version:'3.5.1', classifier:'models'
+}
+
+repositories {
+  mavenCentral()
+  jcenter()
+}
+
+
+/******** TASKS *********/
+task dirs << {
+  new File(thrift.pythonOut).mkdirs()
+  new File(thrift.javaOut).mkdirs()
+}
+
+task genThriftPython(type: Exec, dependsOn: 'dirs') {
+  commandLine 'thrift', '-v', '--gen', 'py:utf8strings,slots,new_style', '-out', thrift.pythonOut, thrift.config
+}
+
+task genThriftJava(type: Exec, dependsOn: 'dirs') {
+  commandLine 'thrift', '-v', '--gen', 'java', '-out', thrift.javaOut, thrift.config
+}
+
+compileJava {
+  dependsOn 'genThriftPython', 'genThriftJava'
+}
+
+task packagePython(dependsOn: 'genThriftPython') << {
+  copy {
+    from 'setup.py'
+    from 'MANIFEST.in'
+    from 'version'
+    into 'build/python'
+  }
+  exec {
+    executable = 'python'
+    workingDir = 'build/python'
+    args = ['setup.py', 'sdist']
+  }
+}
+
+task packageJava(type: Jar, dependsOn: [':compileJava', ':processResources']) {
+  baseName = project.name + '-with-dependencies'
+  manifest {
+    attributes 'Main-Class': 'org.insightcentre.nerservice.StanfordCoreNLPServer'
+  }
+  from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+  with jar
+}
+
+defaultTasks 'clean', 'packagePython', 'packageJava'

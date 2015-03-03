@@ -27,3 +27,7 @@ target/
 #Thrift auto-generated code
 python/
 src/main/java/CoreNLP/
+
+#Build and gradle
+build/
+.gradle/
