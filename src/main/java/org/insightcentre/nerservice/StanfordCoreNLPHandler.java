@@ -23,9 +23,9 @@ public class StanfordCoreNLPHandler implements StanfordCoreNLPService.Iface {
 	}
 
 	public Set<String> get_entities(String text) {
-		logger.info("Get entities for :" + text);
+		logger.debug("Get entities for :" + text);
 		Set<String> names = entities.getNamedEntities(text);
-		logger.info(names);
+		logger.debug(names);
 		return names;
 	}
 

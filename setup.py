@@ -4,10 +4,9 @@ version = '1.0.0'
 with open('version') as f:
     version = f.readline()
 
-# WARNING: copy this to build/thrift/py before running setup.py
 setup(
-    name='insight-centre.stanford-corenlp.thrift',
-    version=version,
+    name='corenlp',
+    version='1.0',
     # package_dir={'': 'build/thrift/py'},
     # packages=find_packages('build/thrift/py/corenlp'),
     packages=[

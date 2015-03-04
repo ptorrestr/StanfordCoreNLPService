@@ -35,12 +35,12 @@ public class Entities {
 					currentNer += " " + word;
 				else {
 					if ( !currentNer.equals("") )
-						namedEntities.add(currentNer);
+						namedEntities.add(currentNer.trim());
 					currentNer = "";
 				}
 			}
 			if ( !currentNer.equals("") )
-				namedEntities.add(currentNer);
+				namedEntities.add(currentNer.trim());
 		}
 		return namedEntities;
 	}
